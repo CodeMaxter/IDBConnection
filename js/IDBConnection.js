@@ -43,20 +43,16 @@ var IDBConnection = (function () {
             }.bind(this);
 
             request.onupgradeneeded = function (event) {
-                var index, indexLength;
-
                 console.log("request.onupgradeneeded");
 
                 objectStore = event.currentTarget.result.createObjectStore(schema.name, schema.key);
 
-                for (index = 0, indexLength = schema.indexes.length; index < indexLength; ++index) {
+                schema.indexes.forEach(function (index) {
                     this.createIndex(
-                        schema.indexes[index].name, 
-                        schema.indexes[index].keyPath, {
-                            unique: schema.indexes[index].unique
-                        }
+                        index.name, 
+                        index.keyPath, {unique: index.unique}
                     );
-                }
+                }.bind(this));
             }.bind(this);
         },
         add: function (table, data) {

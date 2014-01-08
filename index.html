@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>indexedDB</title>
+
+    <style type="text/css">
+        form label {
+            display: block;
+            float: left;
+            margin-right: 10px;
+            width: 80px;
+        }
+    </style>    
+</head>
+
+<body>
+
+    <div id="container">
+        <form id="users" action="" method="post">
+            <div>
+                <label for="id">Id</label>
+                <input type="text" id="id" size="6">
+                <button id="query" type="button">Query</button>
+                <button id="delete" type="button">Delete</button>
+            </div>
+            <div>
+                <label for="name">Name</label>
+                <input type="text" id="name" size="26">
+            </div>
+            <div>
+                <label for="lastname">Lastname</label>
+                <input type="text" id="lastname" size="26">
+            </div>
+            <div>
+                <label for="age">Age</label>
+                <input type="text" id="age" size="6">
+            </div>
+            <div>
+                <button id="save" type="button">Save</button>
+                <button id="list" type="button">List</button>
+            </div>
+        </form>
+    </div>
+
+    <script src="js/IDBConnection.js"></script>
+    <script src="js/app.js"></script>
+</body>
+
+</html>

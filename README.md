@@ -44,7 +44,8 @@ iDBConnection.add("customers", {
     name: document.querySelector("#name").value,
     lastname: document.querySelector("#lastname").value,
     age: document.querySelector("#age").value
-});```
+});
+```
 
 ```JavaScript
 iDBConnection.get("customers", parseInt(document.querySelector("#id").value, 10));

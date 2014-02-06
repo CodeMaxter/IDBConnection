@@ -1,7 +1,7 @@
 var IDBConnection = (function () {
     "use strict";
 
-    // private attributes amn methods
+    // private attributes an methods
     var request, db, IDBConnection, objectStore, getObjectStore, transactionModes;
 
     transactionModes = {
@@ -17,7 +17,7 @@ var IDBConnection = (function () {
             store: transaction.objectStore(table)
         };
     };
-    
+
     // constructor
     IDBConnection = function () {
         console.log("constructor");
@@ -26,9 +26,12 @@ var IDBConnection = (function () {
     IDBConnection.prototype = {
         constructor: IDBConnection,
         // events
+        onAdd: function (data, error) {},
         onClose: function () {},
         onDelete: function (key, error) {},
+        onGet: function (result, error) {},
         onReady: function () {},
+        onUpdate: function (data, error) {},
         open: function (name, version, schema) {
             console.log("open(%s, %s)", name, version);
 
@@ -55,15 +58,19 @@ var IDBConnection = (function () {
                 }.bind(this));
             }.bind(this);
         },
+        query: function (table, indexName) {
+            var objectStore = getObjectStore(table, transactionModes.readwrite);
+            return new IDBIndexQuery(objectStore, indexName || null);
+        },
         add: function (table, data) {
             var objectStore;
             
             objectStore = getObjectStore(table, transactionModes.readwrite);
 
             var request = objectStore.store.add(data);
-            request.onsuccess = function(evt) {
-                console.log("agregado")
-            };
+            request.onsuccess = function(event) {
+                this.onAdd(data);
+            }.bind(this);;
         },
         clear: function () {
             var objectStore = getObjectStore(table, transactionModes.readwrite);
@@ -89,7 +96,7 @@ var IDBConnection = (function () {
         },
         delete: function (table, key) {
             var objectStore, request;
-        
+
             objectStore = getObjectStore(table, transactionModes.readwrite);
             request = objectStore.store.delete(key);
 
@@ -101,6 +108,48 @@ var IDBConnection = (function () {
             request.onerror = function (error) {
                 this.onDelete(key, error);
             }.bind(this);
+        },
+        get: function (table, key) {
+            var objectStore, request;
+
+            objectStore = getObjectStore(table, transactionModes.readwrite);
+
+            request = objectStore.store.get(key);
+            request.onerror = function(event) {
+                this.onGet(null, event);
+            }.bind(this);
+
+            request.onsuccess = function(event) {
+                this.onGet(event.target.result, null);
+            }.bind(this);
+        },
+        update: function (table, key, data) {
+            var objectStore, request;
+
+            // Get the stored record
+            this.get(table, key);
+
+            this.onGet = function (item, error) {
+                var key;
+
+                // Update the stored record with the new data
+                for (key in data) {
+                    item[key] = data[key];
+                }
+
+                objectStore = getObjectStore(table, transactionModes.readwrite);
+
+                // Put this updated object back into the database.
+                request = objectStore.store.put(item);
+
+                request.onerror = function(event) {
+                    this.onUpdate(null, event);
+                }.bind(this);
+
+                request.onsuccess = function(event) {
+                    this.onUpdate(item);
+                }.bind(this);
+            };
         }
     };
 

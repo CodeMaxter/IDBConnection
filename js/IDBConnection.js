@@ -59,8 +59,11 @@ var IDBConnection = (function () {
             }.bind(this);
         },
         query: function (table, indexName) {
-            var objectStore = getObjectStore(table, transactionModes.readwrite);
-            return new IDBIndexQuery(objectStore, indexName || null);
+            return new IDBIndexQuery({
+                "db": db,
+                "table": table,
+                "transactionModes": transactionModes
+            }, indexName || null);
         },
         add: function (table, data) {
             var objectStore;

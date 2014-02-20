@@ -9,12 +9,12 @@ iDBConnection.open("testDB", 1, {
         autoIncrement: true,
     },
     indexes: [{
-        name: "name", 
-        keyPath: "name", 
+        name: "firstName", 
+        keyPath: "firstName", 
         unique: false
     }, {
-        name: "lastname", 
-        keyPath: "lastname", 
+        name: "lastName", 
+        keyPath: "lastName", 
         unique: false
     }, {
         name: "age", 
@@ -41,8 +41,8 @@ document.querySelector("#save").addEventListener("click", function() {
     if ("" !== id) {
         id = parseInt(document.querySelector("#id").value, 10);
         iDBConnection.update("customers", id, {
-            name: document.querySelector("#name").value,
-            lastname: document.querySelector("#lastname").value,
+            firstName: document.querySelector("#firstName").value,
+            lastName: document.querySelector("#lastName").value,
             age: document.querySelector("#age").value
         });
 
@@ -51,12 +51,15 @@ document.querySelector("#save").addEventListener("click", function() {
         }
     } else {
         iDBConnection.add("customers", {
-            name: document.querySelector("#name").value,
-            lastname: document.querySelector("#lastname").value,
+            firstName: document.querySelector("#firstName").value,
+            lastName: document.querySelector("#lastName").value,
             age: document.querySelector("#age").value
         });
 
         iDBConnection.onAdd = function (customer, error) {
+            if (error) {
+                alert(error);
+            }
             alert("The customer " + JSON.stringify(customer) + " was added.");
         }
 
@@ -81,10 +84,24 @@ document.querySelector("#list").addEventListener("click", function() {
     var iDBIndexQuery = iDBConnection
         .query("customers")
 //        .filter("lastname", "Schumacher")
-        .only("name", "John")
+//        .only("name", "John")
         .execute();
 
     iDBIndexQuery.onQuery = function (result) {
+        var index, container;
+
+        container = document.querySelector('#listContainer');
+        container.innerHTML = '';
         console.log(JSON.stringify(result));
+        for (index in result) {
+            var element = document.createElement('div');
+            var customer = result[index].firstName 
+                + ' ' 
+                + result[index].lastName
+                + ' - ' + result[index].age
+                + ' years old';
+            element.appendChild(document.createTextNode(customer));
+            container.appendChild(element);
+        }
     };
 }, false);

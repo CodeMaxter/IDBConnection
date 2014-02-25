@@ -39,6 +39,9 @@ iDBConnection.open("testDB", 1, {
 });
 ```
 
+Adding items
+===
+
 To add a object to the database, simply call to add method with the table name how first parameter and the object how second parameter.  A onAdd event is fired when the object is stored or a error happen.
 
 ```JavaScript
@@ -57,6 +60,9 @@ iDBConnection.onAdd = function (customer, error) {
 }
 ```
 
+Retrieving items
+===
+
 To get a record from the database, simply call the get method with the table name how first parameter and the keyPath to search how second parameter.  A onGet event is fired with the result or the error.
 
 ```JavaScript
@@ -67,11 +73,34 @@ iDBConnection.onGet = function (result, error) {
 };
 ```
 
+Deleting items
+===
+
 To delete a record simply call to the method delete with the table name how first parameter and the keyPath of the record to delete how second parameter. a onDelete event is fired with the keyPath deleted or the error is a error happen.
 
 ```JavaScript
 iDBConnection.delete("customers", 1);
+
 iDBConnection.onDelete = function (key, error) {
     alert("The customer with id " + key + " was deleted");
+};
+```
+
+Querying items
+===
+
+```JavaScript
+var iDBIndexQuery = iDBConnection
+    .query("customers", "optionalIndex")
+    .filter("lastname", "John")
+    .only("name", "John")
+    .execute();
+
+iDBIndexQuery.onQuery = function (result) {
+    var index;
+
+    for (index in result) {
+		// get the data of each item result[index]
+    }
 };
 ```

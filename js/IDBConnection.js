@@ -20,7 +20,7 @@ var IDBConnection = (function () {
 
     // constructor
     IDBConnection = function () {
-        console.log("constructor");
+        console.log("IDBConnection.constructor");
     };
 
     IDBConnection.prototype = {
@@ -32,39 +32,6 @@ var IDBConnection = (function () {
         onGet: function (result, error) {},
         onReady: function () {},
         onUpdate: function (data, error) {},
-        open: function (name, version, schema) {
-            console.log("open(%s, %s)", name, version);
-
-            request = indexedDB.open(name, version);
-
-            request.onsuccess = function (event) {
-                console.log("request.onsuccess");
-                db = request.result;
-                console.log(db);
-
-                this.onReady();
-            }.bind(this);
-
-            request.onupgradeneeded = function (event) {
-                console.log("request.onupgradeneeded");
-
-                objectStore = event.currentTarget.result.createObjectStore(schema.name, schema.key);
-
-                schema.indexes.forEach(function (index) {
-                    this.createIndex(
-                        index.name, 
-                        index.keyPath, {unique: index.unique}
-                    );
-                }.bind(this));
-            }.bind(this);
-        },
-        query: function (table, indexName) {
-            return new IDBIndexQuery({
-                "db": db,
-                "table": table,
-                "transactionModes": transactionModes
-            }, indexName || null);
-        },
         add: function (table, data) {
             var objectStore;
             
@@ -125,6 +92,39 @@ var IDBConnection = (function () {
             request.onsuccess = function(event) {
                 this.onGet(event.target.result, null);
             }.bind(this);
+        },
+        open: function (name, version, schema) {
+            console.log("open(%s, %s)", name, version);
+
+            request = indexedDB.open(name, version);
+
+            request.onsuccess = function (event) {
+                console.log("request.onsuccess");
+                db = request.result;
+                console.log(db);
+
+                this.onReady();
+            }.bind(this);
+
+            request.onupgradeneeded = function (event) {
+                console.log("request.onupgradeneeded");
+
+                objectStore = event.currentTarget.result.createObjectStore(schema.name, schema.key);
+
+                schema.indexes.forEach(function (index) {
+                    this.createIndex(
+                        index.name, 
+                        index.keyPath, {unique: index.unique}
+                    );
+                }.bind(this));
+            }.bind(this);
+        },
+        query: function (table, indexName) {
+            return new IDBQuery({
+                "db": db,
+                "table": table,
+                "transactionModes": transactionModes
+            }, indexName || null);
         },
         update: function (table, key, data) {
             var objectStore, request;

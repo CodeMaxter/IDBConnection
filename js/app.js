@@ -84,7 +84,7 @@ document.querySelector("#list").addEventListener("click", function() {
     var iDBIndexQuery = iDBConnection
         .query("customers")
 //        .filter("lastname", "Schumacher")
-//        .only("name", "John")
+        .only("firstName", "John")
         .execute();
 
     iDBIndexQuery.onQuery = function (result) {

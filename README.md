@@ -1,6 +1,5 @@
 #IDBConnection.js
 
-
 IDBConnection.js is is a wrapper for [IndexedDB](http://www.w3.org/TR/IndexedDB/) to make it easier to work against.
 The library work in a OOP way and emmit events for all operations.
 
@@ -60,6 +59,11 @@ iDBConnection.onAdd = function (customer, error) {
 ###Retrieving items
 
 To get a record from the database, simply call the get method with the table name how first parameter and the keyPath to search how second parameter.  A onGet event is fired with the result or the error.
+    name: document.querySelector("#name").value,
+    lastname: document.querySelector("#lastname").value,
+    age: document.querySelector("#age").value
+});
+```
 
 ```JavaScript
 iDBConnection.get("customers", 1);
@@ -94,7 +98,7 @@ iDBIndexQuery.onQuery = function (result) {
     var index;
 
     for (index in result) {
-		// get the data of each item result[index]
+        // get the data of each item result[index]
     }
 };
 ```

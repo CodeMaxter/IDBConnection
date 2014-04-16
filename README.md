@@ -1,12 +1,10 @@
-IDBConnection.js
-====
+#IDBConnection.js
+
 
 IDBConnection.js is is a wrapper for [IndexedDB](http://www.w3.org/TR/IndexedDB/) to make it easier to work against.
 The library work in a OOP way and emmit events for all operations.
 
-Usage
-====
-
+#Usage
 
 Add a reference to IDBConnection.js in your application before you want to use IndexedDB:
 
@@ -39,8 +37,7 @@ iDBConnection.open("testDB", 1, {
 });
 ```
 
-Adding items
-===
+###Adding items
 
 To add a object to the database, simply call to add method with the table name how first parameter and the object how second parameter.  A onAdd event is fired when the object is stored or a error happen.
 
@@ -60,8 +57,7 @@ iDBConnection.onAdd = function (customer, error) {
 }
 ```
 
-Retrieving items
-===
+###Retrieving items
 
 To get a record from the database, simply call the get method with the table name how first parameter and the keyPath to search how second parameter.  A onGet event is fired with the result or the error.
 
@@ -73,8 +69,7 @@ iDBConnection.onGet = function (result, error) {
 };
 ```
 
-Deleting items
-===
+###Deleting items
 
 To delete a record simply call to the method delete with the table name how first parameter and the keyPath of the record to delete how second parameter. a onDelete event is fired with the keyPath deleted or the error is a error happen.
 
@@ -86,8 +81,7 @@ iDBConnection.onDelete = function (key, error) {
 };
 ```
 
-Querying items
-===
+###Querying items
 
 ```JavaScript
 var iDBIndexQuery = iDBConnection

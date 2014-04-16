@@ -2,10 +2,12 @@ var IDBQuery = (function () {
     "use strict";
 
     // private attributes an methods
+    // TODO make the properties to real private
     var IDBQuery, filters = [], config, getObjectStore, indexName,
         queryOptions = {indexName: null, keyRange: null};
 
     getObjectStore = function (table, transactionMode) {
+        // TODO add a exception to catch errors
         var transaction = config.db.transaction(table, transactionMode);
 
         return {

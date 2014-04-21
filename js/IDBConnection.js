@@ -73,7 +73,7 @@ var IDBConnection = (function () {
                 this.onClear(null);
             }.bind(this);
 
-            transaction.onerror = function (error) {
+            objectStore.transaction.onerror = function (error) {
                 this.onClear(error);
             }.bind(this);
         },
@@ -185,4 +185,4 @@ var IDBConnection = (function () {
 
     // return module
     return IDBConnection;
-}());
+})();
